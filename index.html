@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>UE 223 - Semaine 4 - Exercice</title>
+	<style>
+		body{font-family:verdana}
+		#content{width:450px;border:1px solid black;padding:10px;margin:auto;}
+		#consignes{border:1px solid black;text-align:justify;padding:5px;margin:10px;background:#bdbdbd}
+		ul li, p, code{font-size:11px;}
+		fieldset.appel{background:#bdbdbd;text-align:center;}
+		fieldset.retour{background:#fff}
+		legend{font-size:11px;font-weight:bold}
+		.clear{clear:both;}
+	</style>
+</head>
+<body>
+	<p>
+		<strong>UE 223 - Exercice de la semaine 4</strong><br />
+		Nom : Dauphin<br />
+		Prénom : Emilie<br />
+		Promotion : DEUST 313
+	</p>
+	<div id="content">
+		<div id="consignes">
+			<p>
+				L’exercice de cette semaine ajoute un aspect supplémentaire : 
+				le dialogue avec une base de données.
+			</p>
+			<p>
+				Cette page web "index.html" comprend 2 parties intitulées : « ajouter un nouveau client » 
+				et « vérifier l'existence d’un client ».
+			</p>
+			<p>
+				Dans la partie 1, quatre éléments de formulaires sont proposés :
+			</p>
+			<ul>
+				<li>Nom du client - input de type "text"</li>
+				<li>Profession du client - liste déroulante "select"</li>
+				<li>Date d'ajout - input de type "text"</li>
+				<li>... et un bouton d'envoi de formulaire
+			</ul>
+			<p>
+				Si l’utilisateur remplit correctement les trois champs, les données 
+				sont envoyées en POST par le biais d’une application AJAX. La page cible est la page "ajouter_client.php" 
+				qui effectue un nouveau contrôle des données. Si tous les tests sont concluants, un identifiant unique
+				est généré par le traitement PHP, puis la totalité des informations (nom, profession, date d'ajout, identifiant unique) 
+				sont stockées en base de données (voir le fichier "bdd.sql" fourni). 
+				Un message de retour approprié doit ensuite s'afficher sur cette page Web, retournant notamment en cas 
+				de réussite, l'identifiant unique généré :
+			</p>
+			<ul>
+				<li>« le client identifiant #### a été ajouté à la BDD »</li>
+				<li>« les zones de texte n’ont pas été correctement remplies »</li>
+				<li>etc…</li>
+			</ul>
+			<p>
+				Dans la partie 2, un "input" de type "text" permet de rechercher si un 
+				client est inscrit dans la base de données. Pour cela, il faut saisir son identifiant unique. 
+				Si la zone de texte est remplie correctement, un appel AJAX cible le fichier
+				"chercher_client.php" qui effectue les tests et les traitements adaptés. Vous êtes libre d'effectuer 
+				ce traitement AJAX en GET ou en POST.
+				Si l'identifiant est trouvé dans la base de données, les 4 champs correspondant à ce client
+				doivent être affichés dans un tableau au sein de la page "index.html".
+				Si l'identifiant n'est pas trouvé, un message de retour approprié sera affiché sur la même page.
+			</p>
+			<p>
+				<strong>Remarques :</strong>
+			</p>
+			<p>La liste déroulante "Profession" sera constitué des valeurs suivantes : </p>
+			<ul>
+				<li>label : Garagiste ==> valeur : GA</li>
+				<li>label : Développeur ==> valeur : DE</li>
+				<li>label : Maître du monde ==> valeur : MA</li>
+				<li>label : Autre ==> valeur : AU</li>
+			</ul>
+			<p>
+				Le champ "date d'ajout" doit respecter le format JJ/MM/YYYY et sa valeur ne pourra être 
+				postérieur à la date du jour. 
+			</p>
+			<p>
+				La date d'ajout doit être stockée sous la forme d'un timestamp en base de données.
+			</p>
+			<p>
+				L'identifiant généré est composé des 3 premières lettres du nom du client, de la valeur du 
+				champ "profession" sélectionné et de quatre chiffres définis aléatoirement. <br> 
+				<em>Exemple pour un garagiste appelé "Smith" : <strong>SMIGA1234</strong></em>
+			</p>
+			<p>
+				Utilisez la base de données <em>"bdd.sql"</em> qui vous est fournie.
+			</p>
+			<p>
+				Stocker vos paramètres de connexion à votre base de données dans un fichier <em>'inc.connexion.php'</em> 
+				que vous appelerez dans vos traitements PHP.
+			</p>
+			<p>
+				Attention ! Pensez à effectuer de nombreux tests sur les valeurs saisies et transmises : coté 
+				PHP <em><strong>et</strong></em> côté Javascript : la qualité et la pertinence des tests effectués seront prises en compte.				
+			</p>
+		</div>
+		<br /><hr /><br />
+		<fieldset>
+			<legend>Ajouter un nouveau client</legend>
+			<form method="post">
+            Veuillez renseigner votre nom:<br /> 
+			<input type="text" id="nom"/>
+            <br />
+            Veuillez renseigner votre profession: <br />
+            <select>
+								<option value="" selected="selected"></option>
+								<option value="GA">Garagiste</option>
+								<option value="DE">Développeur</option>
+								<option value="MA">Maître du monde</option>
+								<option value="AU">Autre</option>
+							</select>
+            <br />
+            Date d'ajout (au format JJ/MM/AAAA):
+            <input type="text" value="JJ/MM/AAAA" name="date_ajout"/>
+            <br />
+            <input type="button" id="valider" value="Valider l'inscription" />
+			</form>
+		</fieldset>
+		<br /><hr /><br />
+		<fieldset>
+			<legend>Vérifier l'existence d’un client</legend>
+			<form>
+			Veuillez renseigner votre identifiant:<br /> 
+			<input type="text" id="identifiant"/>
+            <br />
+            <input type="button" id="valider2" value="Me rechercher" />
+            <p id="retour id">
+			</form>
+		</fieldset>
+	</div>
+    <SCRIPT language="Javascript">
+<!--	
+// Instanciation de l'objet XMLHttpRequest
+	function creation_xhr()
+	{
+			var xhr = null;  	
+	
+			if (window.XMLHttpRequest) 
+			{ 							
+				xhr = new XMLHttpRequest();
+			}
+			else if (window.ActiveXObject) 
+			{ 						 
+				xhr = new ActiveXObject("Microsoft.XMLHTTP"); 
+			}
+			else  
+			{ 										 
+				alert("Ce navigateur ne supporte pas les objets XMLHTTPRequest."); 
+			}
+			return xhr; 
+	}
+	//appel de la fonction pour la premiere partie
+	var bouton1 = document.getElementById("valider");
+	bouton1.onclick= function verif()
+	{	
+	//vérification du nom
+	var nom = document.getElementById("nom").value;
+		if(nom == ""){
+		alert("Renseignez votre nom !");
+		return false;}
+	//vérification de la profession
+	var liste = document.getElementsByTagName('select')[0];
+	var selec = liste.options[liste.selectedIndex].text;
+	var val = liste.options[liste.selectedIndex].value;
+	if(selec.length<2){
+		alert("Veuillez renseigner votre profession");
+		return false;}
+	//vérification de la date d'ajout 
+	var date_ajout = document.getElementsByName("date_ajout")[0].value;
+			var parties_date = date_ajout.split('/');
+			//vérification des 3 parties de la date
+			if(parties_date.length != 3){	
+				alert("Date au format incorrect !");
+				return false;
+			}
+			if(parties_date[0].length != 2 || isNaN(parties_date[0])){
+				alert("Vérifiez le jour !");
+				return false;
+			}
+			if(parties_date[1].length != 2 || isNaN(parties_date[1])){
+				alert("Vérifiez le mois !");
+				return false;
+			}
+			if(parties_date[2].length != 4 || isNaN(parties_date[2])){
+				alert("Vérifiez l'année !");
+				return false;
+			}
+			
+		var xhr = creation_xhr();
+		xhr.onreadystatechange = function() 
+		{
+			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
+			{
+				alert(xhr.responseText);		
+			}
+		}
+		xhr.open("POST", "./ajouter_client1.php", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.send("nom="+ nom +"&selec="+ selec +"&date_ajout="+ date_ajout+"&val="+ val);
+		}
+
+//appel de la fonction pour la seconde partie
+	var bouton2 = document.getElementById("valider2");
+	bouton2.onclick= function verif()
+	{	
+	//vérification de l'identifiant
+	var reID = document.getElementById("identifiant").value;
+		if(reID == ""){
+		alert("Renseignez votre identifiant !");
+		return false;}
+		if (/^[a-z]{1,3}(?:GA|DE|MA|AU)[1-9]{4,4}$/i.test(reID)) {
+	var xhr = creation_xhr();
+		xhr.onreadystatechange = function() 
+		{
+			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
+			{
+				texte=xhr.responseText;
+				document.getElementById("retour id").innerHTML = texte;		
+			}
+		}
+		xhr.open("POST", "./chercher_client.php", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.send("reID="+ reID);
+		}
+ else {
+    alert("ID invalide ! Veuillez vérifier sa composition");
+}
+}
+//-->
+</script>
+</body>
+</html>
